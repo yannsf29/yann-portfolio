@@ -1,13 +1,16 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :edit, :update, :destroy, :destroy, :toggle_status]
-
-  # GET /blogs or /blogs.json
+  layout "blog"
+  # GET /blogs 
   def index
     @blogs = Blog.all
+    @page_title = "MY Portfolio | Blog"
   end
 
-  # GET /blogs/1 or /blogs/1.json
+  # GET /blogs/1 
   def show
+    @page_title = @blog.title
+    @seo_keywords = @blog.body
   end
 
   # GET /blogs/new
@@ -15,39 +18,38 @@ class BlogsController < ApplicationController
     @blog = Blog.new
   end
 
-  # GET /blogs/1/edit
+  # GET /blogs/edit
   def edit
   end
 
-  # POST /blogs or /blogs.json
+  # POST /blogs 
   def create
     @blog = Blog.new(blog_params)
 
     respond_to do |format|
       if @blog.save
-        format.html { redirect_to blog_url(@blog), notice: "Your Post is Now Live." }
-        format.json { render :show, status: :created, location: @blog }
+        format.html { redirect_to @blog, notice: "Your Post is Now Live." }
+        
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @blog.errors, status: :unprocessable_entity }
+        format.html { render :new }
+        
       end
     end
   end
 
-  # PATCH/PUT /blogs/1 or /blogs/1.json
-  def update
+  # PATCH/PUT /blogs/1 
     respond_to do |format|
       if @blog.update(blog_params)
-        format.html { redirect_to blog_url(@blog), notice: "Blog was successfully updated." }
-        format.json { render :show, status: :ok, location: @blog }
+        format.html { redirect_to @blog, notice: "Blog was successfully updated." }
+        
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @blog.errors, status: :unprocessable_entity }
+        format.html { render :edit }
+        
       end
     end
   end
 
-  # DELETE /blogs/1 or /blogs/1.json
+  # DELETE /blogs/1 
   def destroy
     @blog.destroy
 
@@ -76,6 +78,5 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.require(:blog)
+      params.require(:blog).permit(:title, :body)
     end
-end
