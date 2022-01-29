@@ -20,7 +20,7 @@ layout 'portfolio'
     
         respond_to do |format|
           if @portfolio_item.save
-            format.html { redirect_to @portfolios_path, notice: 'Your Portfolio item is Now Live.' }
+            format.html { redirect_to portfolios_path, notice: 'Your Portfolio item is Now Live.' }
             
           else
             format.html { render :new }
